@@ -29,5 +29,6 @@ int main(){
         } else printf("只能投1元 2元和5元硬币哦\n");
     } while (flag!=1);
     printf("%d(找零)",sum+collect-money3);
+    system("pause");
     return 0;
 }

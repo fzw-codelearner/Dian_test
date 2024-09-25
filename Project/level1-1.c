@@ -26,5 +26,6 @@ int main(){
         for (int i =0;i<num;i++) printf("%c",inp[0]);
         printf(" %c",inp[4]);
     }
+    system("pause");
     return 0;
 }

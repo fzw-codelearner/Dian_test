@@ -125,5 +125,6 @@ int main(){
         else goto End;
     End:
         printf("所有商品已选完");
+    system("pause");
         return 0;
 }
