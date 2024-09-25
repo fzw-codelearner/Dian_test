@@ -1,0 +1,129 @@
+//
+// Created by fzw on 2024/9/11.
+//
+#include <stdio.h>
+#include <windows.h>
+#include <ctype.h>
+#include <stdlib.h>
+#define STRLEN 10
+
+struct Channel{                                                        //通道类型
+    int price;
+    int num;
+    char kind;
+};
+
+struct Channel channel[6] ={0,0,' '};
+
+
+int main(){
+
+    SetConsoleCP(CP_UTF8);                                 //设置中文编码标准
+    SetConsoleOutputCP(CP_UTF8);
+
+    char inp[STRLEN];
+    char num_str[2];//初始化承载输入内容的字符串
+    int flag =0;                                                  //flag->结束条件;ci->回退次数
+
+
+    BOOL geshi;
+    printf("排放货物格式: 货物名称 通道 单价 数量\n");
+    do {
+
+        printf("请摆放货物,如果摆放完成请输入\"END\",末尾不要有空格哦否则是格式错误\n");
+        fgets(inp,STRLEN,stdin);
+        geshi = (isalpha(inp[0])&& isdigit(inp[2])&& isdigit(inp[4])&& isdigit(inp[6]));
+        if (inp[0]=='E'&&inp[1]=='N'&&inp[2]=='D') flag=1;                //判断是否结束
+        else if (geshi==0) printf("格式不对");                       //判断格式是否正确
+        else{                                                            //摆放货物
+            if (isalpha(channel[(int )inp[2]-48].kind)) {
+                printf("该通道已经放了%c货物",channel[(int )inp[2]-48].kind);
+            }
+            else{
+                channel[(int) inp[2] - 48].price = (int) inp[4] - 48;
+                channel[(int) inp[2] - 48].kind = inp[0];
+                num_str[0] =inp[6];
+                num_str[1] =inp[7];
+                channel[(int) inp[2] - 48].num = atoi(num_str);
+            }
+        }
+    }
+    while(flag != 1);
+
+
+
+    Mai:
+        flag=0;
+        int money3=0;
+        printf("购买货物格式: 货物名 所在通道 数量,中间要以空格间隔开来哦\n");
+        do {
+            printf("请选取你要的货物,如果选取完成请输入\"END\"\n");
+            fgets(inp,STRLEN,stdin);
+            geshi = (isalpha(inp[0])&& isdigit(inp[2])&& isdigit(inp[4]));
+            if (inp[0]=='E'&&inp[1]=='N'&&inp[2]=='D') {
+                flag = 1;
+            }              //判断是否结束
+            else if (geshi!=1) printf("格式不对");
+            else{                                                          //选择商品
+                num_str[0] = inp[4];
+                num_str[1] = inp[5];
+
+                if(channel[(int )inp[2]-48].num <= 0) {
+                    printf("%c商品已经售罄\n",channel[(int )inp[2]-48].kind);
+                    continue; }
+                if(channel[(int )inp[2]-48].kind!=inp[0]) {
+                    printf("抱歉哦,%d通道里没有%c哦\n",(int )inp[2]-48,inp[0]);
+                    continue;
+                }
+                if (channel[(int )inp[2]-48].num <(atoi(num_str))){
+                    printf(("抱歉没有那么多商品呢\n"));
+                    continue;
+                }
+                channel[(int )inp[2]-48].num -=atoi(num_str);
+                money3+=(atoi(num_str))*channel[(int )inp[2]-48].price;
+            }
+            int maiflag=0;
+            for (int i = 1;i<6;i++){
+                if (channel[i].num>0) maiflag=1;
+            }
+            if (maiflag==0){
+                printf("商品已全部选完");
+                flag =1;
+            }
+
+        }
+        while(flag != 1);
+
+
+    Qu:
+        flag =0;
+        int sum =0,collect = 0;
+        do {
+            printf("还差%d元\n",money3-sum);
+            fgets(inp,STRLEN,stdin);
+            collect = atoi(inp);
+            geshi =(collect==1||collect==2||collect==5);
+            if (geshi) {
+                if (sum + collect >= money3) flag = 1;
+                else {
+                    sum += collect;
+                }
+            }
+            else printf("只能投1元 2元和5元硬币哦");
+
+        }
+        while(flag != 1);
+        printf("找零%d元",sum+collect-money3);
+        int tiaoflag =0;
+        for (int i = 1;i<6;i++){
+            if (channel[i].num>0) tiaoflag=1;
+        }
+        if (tiaoflag==1) {
+            printf("开始下一次购买啦");
+            goto Mai;
+        }
+        else goto End;
+    End:
+        printf("所有商品已选完");
+        return 0;
+}
