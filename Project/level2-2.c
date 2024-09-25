@@ -38,8 +38,7 @@ int main(){
             printf("请摆放货物,如果摆放完成请输入\"END\",末尾不要有空格哦否则是格式错误\n");
             fgets(inp,STRLEN,stdin);
             geshi = (isalpha(inp[0])&& isdigit(inp[2])&& isdigit(inp[4])&& isdigit(inp[6]));
-            if (inp[0]=='E'&&inp[1]=='N'&&inp[2]=='D') flag=1;                //判断是否结束
-            else if (geshi==0) printf("格式不对");                       //判断格式是否正确
+            if (inp[0]=='E'&&inp[1]=='N'&&inp[2]=='D') flag=1;                //判断是否结束//判断格式是否正确
             else if (inp[0]=='B'&&inp[1]=='A'&&inp[2]=='C'&&inp[3]=='K'){     //回退操作
                 if (ci>0) {
                     ci-=1;
@@ -51,6 +50,7 @@ int main(){
                     printf("不能再回退");
                 }
             }
+            else if (geshi==0) printf("格式不对");
             else{                                                            //摆放货物
                 if (isalpha(channel[(int )inp[2]-48].kind)) {
                     printf("该通道已经放了%c货物",channel[(int )inp[2]-48].kind);
